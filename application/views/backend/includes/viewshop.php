@@ -18,8 +18,6 @@
 					<th>Name</th>
 					<th>Alias</th>
 					<th>User</th>
-					<!--<th>Latitude</th>
-					<th>Longitude</th>-->
 					<th>Meta Title</th>
 					<th>Meta Description</th>
 					<th>Banner</th>

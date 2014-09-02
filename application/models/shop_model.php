@@ -64,41 +64,39 @@ class Shop_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$address,$location,$latitude,$longitude,$contactno,$parkingfacility,$cinema,$restaurant,$entertainment,$website,$email,$logo,$description,$specialoffers,$events,$cinemaoffer,$facebookpage,$pininterest,$instagram,$twitterpage)
+	public function edit($id,$name,$alias,$status,$metatitle,$metadescription,$banner,$bannerdescription,$defaulttax,$user)
 	{
 		$data  = array(
 			'name' => $name,
-			'address' => $address,
-			'description' => $description,
-			'specialoffers' => $specialoffers,
-			'events' => $events,
-			'cinemaoffer' => $cinemaoffer,
-			'facebookpage' => $facebookpage,
-			'pininterest' => $pininterest,
-			'instagram' => $instagram,
-			'twitterpage' => $twitterpage,
-			'location' => $location,
-			'latitude' => $latitude,
-			'longitude' => $longitude,
-			'contactno' => $contactno,
-			'parkingfacility' => $parkingfacility,
-			'cinema' => $cinema,
-			'restaurant' => $restaurant,
-			'entertainment' => $entertainment,
-			'website' => $website,
-			'email' => $email,
-			'logo' => $logo
+			'alias' => $alias,
+			'status' => $status,
+			'metatitle' => $metatitle,
+			'metadescription' => $metadescription,
+			'bannername' => $banner,
+			'bannerdescription' => $bannerdescription,
+			'defaulttax' => $defaulttax,
+			'user' => $user
 		);
-		if($logo != "")
-			$data['logo'] = $logo;
+		if($banner != "")
+			$data['bannername'] = $banner;
 		$this->db->where( 'id', $id );
-		$query=$this->db->update( 'mall', $data );
-		if($query)
-		{
-			$this->savelog($id,'Mall Edited');
-		}
+		$query=$this->db->update( 'shop', $data );
+//		if($query)
+//		{
+//			$this->savelog($id,'Shop Edited');
+//		}
 		return 1;
 	}
+    
+	public function getbannerbyid($id)
+	{
+		$query=$this->db->query("SELECT `bannername` FROM `shop` WHERE `id`='$id'")->row();
+		
+		
+		return $query;
+	}
+    
+    
 	function deleteshop($id)
 	{
 		$query=$this->db->query("DELETE FROM `shop` WHERE `id`='$id'");

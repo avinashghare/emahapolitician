@@ -2809,6 +2809,84 @@ class Site extends CI_Controller
 		}
 	}
     
+    function editshop()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->shop_model->beforeedit($this->input->get('id'));
+        $data[ 'status' ] =$this->user_model->getstatusdropdown();
+        $data['user']=$this->user_model->getuserdropdown();
+		$data['page']='editshop';
+		$data['title']='Edit Shop';
+		$this->load->view('template',$data);
+	}
+	function editshopsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('alias','Alias','trim');
+		$this->form_validation->set_rules('status','status','trim');
+		$this->form_validation->set_rules('metatitle','metatitle','trim');
+		$this->form_validation->set_rules('metadescription','metadescription','trim');
+		$this->form_validation->set_rules('banner','banner','trim');
+		$this->form_validation->set_rules('bannerdescription','bannerdescription','trim');
+		$this->form_validation->set_rules('defaulttax','defaulttax','trim');
+		$this->form_validation->set_rules('user','user','trim');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['before']=$this->store_model->beforeedit($this->input->post('id'));
+            $data[ 'status' ] =$this->user_model->getstatusdropdown();
+//			$data['page2']='block/eventblock';
+			$data['page']='editshop';
+			$data['title']='Edit Shop';
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			$alias=$this->input->post('alias');
+			$status=$this->input->post('status');
+			$metatitle=$this->input->post('metatitle');
+			$metadescription=$this->input->post('metadescription');
+			$bannerdescription=$this->input->post('bannerdescription');
+			$defaulttax=$this->input->post('defaulttax');
+			$user=$this->input->post('user');
+            
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="banner";
+			$banner="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$banner=$uploaddata['file_name'];
+			}
+            
+            if($banner=="")
+            {
+            $banner=$this->shop_model->getbannerbyid($id);
+               // print_r($image);
+                $banner=$banner->bannername;
+            }
+			if($this->shop_model->edit($id,$name,$alias,$status,$metatitle,$metadescription,$banner,$bannerdescription,$defaulttax,$user)==0)
+			$data['alerterror']="shop Editing was unsuccesful";
+			else
+			$data['alertsuccess']="shop edited Successfully.";
+			
+			$data['redirect']="site/viewshop";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+	
+    
+    
 	function changeshopstatus()
 	{
 		$access = array("1");
