@@ -32,7 +32,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($firstname,$lastname,$dob,$password,$accesslevel,$email,$contact,$status,$facebookuserid,$website,$description,$address,$city,$pincode)
+	public function create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)
 	{
 		$data  = array(
 			'firstname' => $firstname,
@@ -40,22 +40,22 @@ class User_model extends CI_Model
 			'password' =>md5($password),
 			'accesslevel' => $accesslevel,
 			'email' => $email,
-            'website'=> $website,
-            'description'=>$description,
+            'streetname'=> $streetname,
+            'area'=>$area,
+            'state'=>$state,
+            'ip'=>$ip,
+            'loyaltypoints'=>$loyaltypoints,
 			'contact' => $contact,
-            'address'=>$address,
             'city'=>$city,
             'pincode'=>$pincode,
-			'status' => $status,
-			'dob' => $dob,
-			'facebookuserid' => $facebookuserid
+			'status' => $status
 		);
 		$query=$this->db->insert( 'user', $data );
 		$id=$this->db->insert_id();
-		if($query)
-		{
-			$this->saveuserlog($id,'User Created');
-		}
+//		if($query)
+//		{
+//			$this->saveuserlog($id,'User Created');
+//		}
 		if(!$query)
 			return  0;
 		else
@@ -88,30 +88,30 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$fname,$lname,$dob,$password,$accesslevel,$contact,$status,$facebookuserid,$website,$description,$address,$city,$pincode)
+	public function edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)
 	{
 		$data  = array(
-			'firstname' => $fname,
-			'lastname' => $lname,
-			'accesslevel' => $accesslevel, 
-            'website'=> $website,
-            'description'=>$description,
+			'firstname' => $firstname,
+			'lastname' => $lastname,
+			'accesslevel' => $accesslevel,
+            'streetname'=> $streetname,
+            'area'=>$area,
+            'state'=>$state,
+            'ip'=>$ip,
+            'loyaltypoints'=>$loyaltypoints,
 			'contact' => $contact,
-            'address'=>$address,
             'city'=>$city,
             'pincode'=>$pincode,
-			'status' => $status,
-			'dob' => $dob,
-			'facebookuserid' => $facebookuserid
+			'status' => $status
 		);
 		if($password != "")
 			$data['password'] =md5($password);
 		$this->db->where( 'id', $id );
 		$query=$this->db->update( 'user', $data );
-		if($query)
-		{
-			$this->saveuserlog($id,'User Details Edited');
-		}
+//		if($query)
+//		{
+//			$this->saveuserlog($id,'User Details Edited');
+//		}
 		return 1;
 	}
 	function deleteuser($id)

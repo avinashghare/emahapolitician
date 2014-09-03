@@ -96,6 +96,20 @@ class Shop_model extends CI_Model
 		return $query;
 	}
     
+     public function getshopdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `shop`  ORDER BY `id` ASC")->result();
+		$return=array(
+		"" => ""
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
     
 	function deleteshop($id)
 	{

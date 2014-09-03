@@ -51,16 +51,14 @@ class Site extends CI_Controller
 		$this->form_validation->set_rules('status','status','trim|');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('contact','contactno','trim');
-		$this->form_validation->set_rules('website','Website','trim|max_length[50]');
-		$this->form_validation->set_rules('description','Description','trim|');
-		$this->form_validation->set_rules('address','Address','trim|');
-		$this->form_validation->set_rules('city','City','trim|max_length[30]');
+		$this->form_validation->set_rules('streetname','Streetname','trim|max_length[50]');
+		$this->form_validation->set_rules('area','Area','trim|');
+		$this->form_validation->set_rules('state','state','trim|');
+		$this->form_validation->set_rules('ip','ip','trim|');
+		$this->form_validation->set_rules('loyaltypoints','loyaltypoints','trim|');
+		$this->form_validation->set_rules('city','City','trim|');
 		$this->form_validation->set_rules('pincode','Pincode','trim|max_length[20]');
-		$this->form_validation->set_rules('facebookuserid','facebookuserid','trim|max_length[20]');
 		
-		$this->form_validation->set_rules('email','Email','trim|valid_email');
-		$this->form_validation->set_rules('status','Status','trim');
-		$this->form_validation->set_rules('dob','DOB','trim');
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
@@ -72,24 +70,23 @@ class Site extends CI_Controller
 		}
 		else
 		{
-            $website=$this->input->post('website');
-            $description=$this->input->post('description');
-            $address=$this->input->post('address');
+            $streetname=$this->input->post('streetname');
+            $area=$this->input->post('area');
+            $state=$this->input->post('state');
+            $ip=$this->input->post('ip');
+            $loyaltypoints=$this->input->post('loyaltypoints');
             $city=$this->input->post('city');
             $pincode=$this->input->post('pincode');
 			$password=$this->input->post('password');
-			if($dob != "")
-			{
-				$dob = date("Y-m-d",strtotime($dob));
-			}
+			
 			$accesslevel=$this->input->post('accesslevel');
 			$email=$this->input->post('email');
 			$contact=$this->input->post('contact');
 			$status=$this->input->post('status');
-			$facebookuserid=$this->input->post('facebookuserid');
+			//$facebookuserid=$this->input->post('facebookuserid');
 			$firstname=$this->input->post('firstname');
 			$lastname=$this->input->post('lastname');
-			if($this->user_model->create($firstname,$lastname,$dob,$password,$accesslevel,$email,$contact,$status,$facebookuserid,$website,$description,$address,$city,$pincode)==0)
+			if($this->user_model->create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)==0)
 			$data['alerterror']="New user could not be created.";
 			else
 			$data['alertsuccess']="User created Successfully.";
@@ -148,21 +145,20 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('password','Password','trim|min_length[6]|max_length[30]');
 		$this->form_validation->set_rules('confirmpassword','Confirm Password','trim|matches[password]');
+		
+		$this->form_validation->set_rules('firstname','First Name','trim|max_length[30]');
+		$this->form_validation->set_rules('lastname','Last Name','trim|max_length[30]');
 		$this->form_validation->set_rules('accessslevel','Accessslevel','trim');
 		$this->form_validation->set_rules('status','status','trim|');
-		$this->form_validation->set_rules('email','Email','trim|required|valid_email|is_unique[user.email]');
+		//$this->form_validation->set_rules('email','Email','trim|required|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('contact','contactno','trim');
-		$this->form_validation->set_rules('website','Website','trim|max_length[50]');
-		$this->form_validation->set_rules('description','Description','trim|');
-		$this->form_validation->set_rules('address','Address','trim|');
-		$this->form_validation->set_rules('city','City','trim|max_length[30]');
+		$this->form_validation->set_rules('streetname','Streetname','trim|max_length[50]');
+		$this->form_validation->set_rules('area','Area','trim|');
+		$this->form_validation->set_rules('state','state','trim|');
+		$this->form_validation->set_rules('ip','ip','trim|');
+		$this->form_validation->set_rules('loyaltypoints','loyaltypoints','trim|');
+		$this->form_validation->set_rules('city','City','trim|');
 		$this->form_validation->set_rules('pincode','Pincode','trim|max_length[20]');
-        
-		$this->form_validation->set_rules('fname','First Name','trim|required|max_length[30]');
-		$this->form_validation->set_rules('lname','Last Name','trim|max_length[30]');
-		$this->form_validation->set_rules('email','Email','trim|valid_email');
-		$this->form_validation->set_rules('status','Status','trim');
-		$this->form_validation->set_rules('dob','DOB','trim');
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
@@ -176,25 +172,25 @@ class Site extends CI_Controller
 		}
 		else
 		{
-            $website=$this->input->post('website');
-            $description=$this->input->post('description');
-            $address=$this->input->post('address');
+			$id=$this->input->post('id');
+            $streetname=$this->input->post('streetname');
+            $area=$this->input->post('area');
+            $state=$this->input->post('state');
+            $ip=$this->input->post('ip');
+            $loyaltypoints=$this->input->post('loyaltypoints');
             $city=$this->input->post('city');
             $pincode=$this->input->post('pincode');
-			$id=$this->input->post('id');
 			$password=$this->input->post('password');
-			$dob=$this->input->post('dob');
-			if($dob != "")
-			{
-				$dob = date("Y-m-d",strtotime($dob));
-			}
+			
 			$accesslevel=$this->input->post('accesslevel');
+			$email=$this->input->post('email');
 			$contact=$this->input->post('contact');
 			$status=$this->input->post('status');
-			$facebookuserid=$this->input->post('facebookuserid');
-			$fname=$this->input->post('fname');
-			$lname=$this->input->post('lname');
-			if($this->user_model->edit($id,$fname,$lname,$dob,$password,$accesslevel,$contact,$status,$facebookuserid,$website,$description,$address,$city,$pincodes)==0)
+			//$facebookuserid=$this->input->post('facebookuserid');
+			$firstname=$this->input->post('firstname');
+			$lastname=$this->input->post('lastname');
+			
+			if($this->user_model->edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -273,7 +269,7 @@ class Site extends CI_Controller
 		$data['table']=$this->user_model->viewusers();
 		$data['alertsuccess']="Status Changed Successfully";
 		$data['redirect']="site/viewusers";
-        $data['other']="template=$template";
+        //$data['other']="template=$template";
         $this->load->view("redirect",$data);
 	}
     
@@ -2909,5 +2905,649 @@ class Site extends CI_Controller
 		$data['title']='View shops';
 		$this->load->view('template',$data);
 	}
+    
+    
+    //shop navigation
+    
+    function viewshopnavigation()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->shopnavigation_model->viewshopnavigation();
+		$data['page']='viewshopnavigation';
+		$data['title']='View shopnavigation';
+		$this->load->view('template',$data);
+	} 
+       
+     public function createshopnavigation()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createshopnavigation';
+		$data[ 'title' ] = 'Create Shopnavigation';
+        $data['user']=$this->shop_model->getshopdropdown();
+//        $data['user']=$this->user_model->getuserdropdown();
+		$data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
+		$data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
+		$data[ 'type' ] =$this->shopnavigation_model->gettypedropdown();
+		$this->load->view( 'template', $data );	
+	}
+    function createshopnavigationsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('alias','Alias','trim');
+		$this->form_validation->set_rules('shop','shop','trim');
+		$this->form_validation->set_rules('order','order','trim');
+		$this->form_validation->set_rules('metatitle','metatitle','trim');
+		$this->form_validation->set_rules('metadescription','metadescription','trim');
+		$this->form_validation->set_rules('bannerdescription','bannerdescription','trim');
+		$this->form_validation->set_rules('positiononwebsite','positiononwebsite','trim');
+		$this->form_validation->set_rules('sizes','sizes','trim');
+		$this->form_validation->set_rules('status','status','trim');
+		$this->form_validation->set_rules('isdefault','isdefault','trim');
+		$this->form_validation->set_rules('type','type','trim');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['page']='createshopnavigation';
+			$data['title']='Create New Shopnavigation';
+            $data['user']=$this->shop_model->getshopdropdown();
+            $data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
+            $data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
+            $data[ 'type' ] =$this->shopnavigation_model->gettypedropdown();
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$alias=$this->input->post('alias');
+			$shop=$this->input->post('shop');
+			$order=$this->input->post('order');
+			$status=$this->input->post('status');
+			$sizes=$this->input->post('sizes');
+			$positiononwebsite=$this->input->post('positiononwebsite');
+			$metatitle=$this->input->post('metatitle');
+			$metadescription=$this->input->post('metadescription');
+			$bannerdescription=$this->input->post('bannerdescription');
+			$isdefault=$this->input->post('isdefault');
+			$type=$this->input->post('type');
+			
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="banner";
+			$banner="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$banner=$uploaddata['file_name'];
+			}
+			if($this->shopnavigation_model->create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)==0)
+			$data['alerterror']="New Shop Navigation could not be created.";
+			else
+			$data['alertsuccess']="Shop Navigation created Successfully.";
+			
+			$data['table']=$this->shopnavigation_model->viewshopnavigation();
+			$data['redirect']="site/viewshopnavigation";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+    function editshopnavigation()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->shopnavigation_model->beforeedit($this->input->get('id'));
+        $data['user']=$this->shop_model->getshopdropdown();
+//        $data['user']=$this->user_model->getuserdropdown();
+		$data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
+		$data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
+		$data[ 'type' ] =$this->shopnavigation_model->gettypedropdown();
+		$data['page']='editshopnavigation';
+		$data['title']='Edit Shopnavigation';
+		$this->load->view('template',$data);
+	}
+	function editshopnavigationsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('alias','Alias','trim');
+		$this->form_validation->set_rules('shop','shop','trim');
+		$this->form_validation->set_rules('order','order','trim');
+		$this->form_validation->set_rules('metatitle','metatitle','trim');
+		$this->form_validation->set_rules('metadescription','metadescription','trim');
+		$this->form_validation->set_rules('bannerdescription','bannerdescription','trim');
+		$this->form_validation->set_rules('positiononwebsite','positiononwebsite','trim');
+		$this->form_validation->set_rules('sizes','sizes','trim');
+		$this->form_validation->set_rules('status','status','trim');
+		$this->form_validation->set_rules('isdefault','isdefault','trim');
+		$this->form_validation->set_rules('type','type','trim');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['before']=$this->shopnavigation_model->beforeedit($this->input->get('id'));
+            $data['user']=$this->shop_model->getshopdropdown();
+    //        $data['user']=$this->user_model->getuserdropdown();
+            $data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
+            $data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
+            $data[ 'type' ] =$this->shopnavigation_model->gettypedropdown();
+            $data['page']='editshopnavigation';
+            $data['title']='Edit Shopnavigation';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			$alias=$this->input->post('alias');
+			$shop=$this->input->post('shop');
+			$order=$this->input->post('order');
+			$status=$this->input->post('status');
+			$sizes=$this->input->post('sizes');
+			$positiononwebsite=$this->input->post('positiononwebsite');
+			$metatitle=$this->input->post('metatitle');
+			$metadescription=$this->input->post('metadescription');
+			$bannerdescription=$this->input->post('bannerdescription');
+			$isdefault=$this->input->post('isdefault');
+			$type=$this->input->post('type');
+			
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="banner";
+			$banner="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$banner=$uploaddata['file_name'];
+			}
+            if($banner=="")
+            {
+                $banner=$this->shopnavigation_model->getbannerbyid($id);
+//                print_r($banner);
+                $banner=$banner->banner;
+            }
+//            print_r($banner);
+			if($this->shopnavigation_model->edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)==0)
+			$data['alerterror']="shop Navigation Editing was unsuccesful";
+			else
+			$data['alertsuccess']="shop Navigation edited Successfully.";
+			
+			$data['redirect']="site/viewshopnavigation";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+	
+    
+    
+	function changeshopnavigationstatus()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->shopnavigation_model->changeshopnavigationstatus($this->input->get('id'));
+		$data['table']=$this->shopnavigation_model->viewshopnavigation();
+		$data['alertsuccess']="Status Changed Successfully";
+		$data['redirect']="site/viewshopnavigation";
+        $this->load->view("redirect",$data);
+	}
+    
+	function deleteshopnavigation()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->shopnavigation_model->deleteshopnavigation($this->input->get('id'));
+		$data['table']=$this->shopnavigation_model->viewshopnavigation();
+		$data['alertsuccess']="Shop Navigation Deleted Successfully";
+		$data['page']='viewshopnavigation';
+		$data['title']='View Shop Navigations';
+		$this->load->view('template',$data);
+	}
+    
+    //Product
+    
+    function viewproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->product_model->viewproduct();
+		$data['page']='viewproduct';
+		$data['title']='View product';
+		$this->load->view('template',$data);
+	} 
+        
+     public function createproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createproduct';
+		$data[ 'title' ] = 'Create product';
+        $data['shop']=$this->shop_model->getshopdropdown();
+        $data['user']=$this->user_model->getuserdropdown();
+		$this->load->view( 'template', $data );	
+	}
+    function createproductsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('alias','Alias','trim');
+		$this->form_validation->set_rules('shop','shop','trim');
+		$this->form_validation->set_rules('metatitle','metatitle','trim');
+		$this->form_validation->set_rules('metadescription','metadescription','trim');
+		$this->form_validation->set_rules('stock','stock','trim');
+		$this->form_validation->set_rules('ean','ean','trim');
+		$this->form_validation->set_rules('tax','tax','trim');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['page']='createproduct';
+			$data['title']='Create New Product';
+            $data['shop']=$this->shop_model->getshopdropdown();
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$alias=$this->input->post('alias');
+			$shop=$this->input->post('shop');
+			$stock=$this->input->post('stock');
+			$ean=$this->input->post('ean');
+			$tax=$this->input->post('tax');
+			$metatitle=$this->input->post('metatitle');
+			$metadescription=$this->input->post('metadescription');
+			
+			if($this->product_model->create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)==0)
+			$data['alerterror']="New Product could not be created.";
+			else
+			$data['alertsuccess']="Product created Successfully.";
+			
+			$data['table']=$this->product_model->viewproduct();
+			$data['redirect']="site/viewproduct";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+    function editproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->product_model->beforeedit($this->input->get('id'));
+        $data['shop']=$this->shop_model->getshopdropdown();
+		$data['page']='editproduct';
+		$data['title']='Edit product';
+		$this->load->view('template',$data);
+	}
+	function editproductsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('alias','Alias','trim');
+		$this->form_validation->set_rules('shop','shop','trim');
+		$this->form_validation->set_rules('metatitle','metatitle','trim');
+		$this->form_validation->set_rules('metadescription','metadescription','trim');
+		$this->form_validation->set_rules('stock','stock','trim');
+		$this->form_validation->set_rules('ean','ean','trim');
+		$this->form_validation->set_rules('tax','tax','trim');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['before']=$this->product_model->beforeedit($this->input->get('id'));
+            $data['shop']=$this->shop_model->getshopdropdown();
+            $data['page']='editproduct';
+            $data['title']='Edit product';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			$alias=$this->input->post('alias');
+			$shop=$this->input->post('shop');
+			$stock=$this->input->post('stock');
+			$ean=$this->input->post('ean');
+			$tax=$this->input->post('tax');
+			$metatitle=$this->input->post('metatitle');
+			$metadescription=$this->input->post('metadescription');
+            
+			if($this->product_model->edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)==0)
+			$data['alerterror']="product Editing was unsuccesful";
+			else
+			$data['alertsuccess']="product edited Successfully.";
+			
+			$data['redirect']="site/viewproduct";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
+	function deleteproduct()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->product_model->deleteproduct($this->input->get('id'));
+		$data['table']=$this->product_model->viewproduct();
+		$data['alertsuccess']="product Deleted Successfully";
+		$data['page']='viewproduct';
+		$data['title']='View products';
+		$this->load->view('template',$data);
+	}
+	
+    //attribute
+    
+    function viewattribute()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->attribute_model->viewattribute();
+		$data['page']='viewattribute';
+		$data['title']='View attribute';
+		$this->load->view('template',$data);
+	} 
+    
+     public function createattribute()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createattribute';
+		$data[ 'title' ] = 'Create attribute';
+		$this->load->view( 'template', $data );	
+	}
+    function createattributesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+		$data[ 'page' ] = 'createattribute';
+		$data[ 'title' ] = 'Create attribute';
+		$this->load->view( 'template', $data );
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			
+			if($this->attribute_model->create($name)==0)
+			$data['alerterror']="New Attribute could not be created.";
+			else
+			$data['alertsuccess']="Attribute created Successfully.";
+			
+			$data['table']=$this->attribute_model->viewattribute();
+			$data['redirect']="site/viewattribute";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+     function editattribute()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->attribute_model->beforeedit($this->input->get('id'));
+		$data['page']='editattribute';
+		$data['title']='Edit Attribute';
+		$this->load->view('template',$data);
+	}
+	function editattributesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+            $data['before']=$this->attribute_model->beforeedit($this->input->get('id'));
+            $data['page']='editattribute';
+            $data['title']='Edit Attribute';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->get_post('id');
+			$name=$this->input->post('name');
+			if($this->attribute_model->edit($id,$name)==0)
+			$data['alerterror']="attribute Editing was unsuccesful";
+			else
+			$data['alertsuccess']="attribute edited Successfully.";
+			
+			$data['redirect']="site/viewattribute";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
+	function deleteattribute()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->attribute_model->delete($this->input->get('id'));
+		$data['table']=$this->attribute_model->viewattribute();
+		$data['alertsuccess']="attribute Deleted Successfully";
+		$data['page']='viewattribute';
+		$data['title']='View attribute';
+		$this->load->view('template',$data);
+	}
+    
+    //Filtergroup
+    
+    function viewfiltergroup()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->filtergroup_model->viewfiltergroup();
+		$data['page']='viewfiltergroup';
+		$data['title']='View filtergroup';
+		$this->load->view('template',$data);
+	} 
+     public function createfiltergroup()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createfiltergroup';
+		$data[ 'title' ] = 'Create filtergroup';
+		$this->load->view( 'template', $data );	
+	}
+    function createfiltergroupsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+		$data[ 'page' ] = 'createfiltergroup';
+		$data[ 'title' ] = 'Create filtergroup';
+		$this->load->view( 'template', $data );
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			
+			if($this->filtergroup_model->create($name)==0)
+			$data['alerterror']="New filtergroup could not be created.";
+			else
+			$data['alertsuccess']="filtergroup created Successfully.";
+			
+			$data['table']=$this->filtergroup_model->viewfiltergroup();
+			$data['redirect']="site/viewfiltergroup";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+     function editfiltergroup()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->filtergroup_model->beforeedit($this->input->get('id'));
+		$data['page']='editfiltergroup';
+		$data['title']='Edit filtergroup';
+		$this->load->view('template',$data);
+	}
+	function editfiltergroupsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+            $data['before']=$this->filtergroup_model->beforeedit($this->input->get('id'));
+            $data['page']='editfiltergroup';
+            $data['title']='Edit filtergroup';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->get_post('id');
+			$name=$this->input->post('name');
+			if($this->filtergroup_model->edit($id,$name)==0)
+			$data['alerterror']="filtergroup Editing was unsuccesful";
+			else
+			$data['alertsuccess']="filtergroup edited Successfully.";
+			
+			$data['redirect']="site/viewfiltergroup";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
+	function deletefiltergroup()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->filtergroup_model->delete($this->input->get('id'));
+		$data['table']=$this->filtergroup_model->viewfiltergroup();
+		$data['alertsuccess']="filtergroup Deleted Successfully";
+		$data['page']='viewfiltergroup';
+		$data['title']='View filtergroup';
+		$this->load->view('template',$data);
+	}
+    
+    
+    //Coupon
+    
+    function viewcoupon()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->coupon_model->viewcoupon();
+		$data['page']='viewcoupon';
+		$data['title']='View coupon';
+		$this->load->view('template',$data);
+	} 
+     public function createcoupon()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createcoupon';
+		$data[ 'title' ] = 'Create coupon';
+		$this->load->view( 'template', $data );	
+	}
+    function createcouponsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('rules','rules','trim|');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+		$data[ 'page' ] = 'createcoupon';
+		$data[ 'title' ] = 'Create coupon';
+		$this->load->view( 'template', $data );
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$rules=$this->input->post('rules');
+			
+			if($this->coupon_model->create($name,$rules)==0)
+			$data['alerterror']="New coupon could not be created.";
+			else
+			$data['alertsuccess']="coupon created Successfully.";
+			
+			$data['table']=$this->coupon_model->viewcoupon();
+			$data['redirect']="site/viewcoupon";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+     function editcoupon()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->coupon_model->beforeedit($this->input->get('id'));
+		$data['page']='editcoupon';
+		$data['title']='Edit coupon';
+		$this->load->view('template',$data);
+	}
+	function editcouponsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('rules','rules','trim|');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+            $data['before']=$this->coupon_model->beforeedit($this->input->get('id'));
+            $data['page']='editcoupon';
+            $data['title']='Edit coupon';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->get_post('id');
+			$name=$this->input->post('name');
+			$rules=$this->input->post('rules');
+			if($this->coupon_model->edit($id,$name,$rules)==0)
+			$data['alerterror']="coupon Editing was unsuccesful";
+			else
+			$data['alertsuccess']="coupon edited Successfully.";
+			
+			$data['redirect']="site/viewcoupon";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
+	function deletecoupon()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->coupon_model->delete($this->input->get('id'));
+		$data['table']=$this->coupon_model->viewcoupon();
+		$data['alertsuccess']="coupon Deleted Successfully";
+		$data['page']='viewcoupon';
+		$data['title']='View coupon';
+		$this->load->view('template',$data);
+	}
+    
+    
 }
 ?>

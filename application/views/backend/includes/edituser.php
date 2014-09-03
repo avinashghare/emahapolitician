@@ -14,13 +14,13 @@
 				<div class="form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">First Name</label>
 				  <div class="col-sm-4">
-					<input type="text" id="normal-field" class="form-control" name="fname" value="<?php echo set_value('fname',$before->firstname);?>">
+					<input type="text" id="normal-field" class="form-control" name="firstname" value="<?php echo set_value('firstname',$before->firstname);?>">
 				  </div>
 				</div>
 				<div class="form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Last Name</label>
 				  <div class="col-sm-4">
-					<input type="text" id="normal-field" class="form-control" name="lname" value="<?php echo set_value('lname',$before->lastname);?>">
+					<input type="text" id="normal-field" class="form-control" name="lastname" value="<?php echo set_value('lastname',$before->lastname);?>">
 				  </div>
 				</div>
 				<div class="form-group">
@@ -35,47 +35,54 @@
 					<input type="password" id="description-field" class="form-control" name="confirmpassword" value="">
 				  </div>
 				</div>
-				<div class="form-group">
-				  <label class="col-sm-2 control-label" for="normal-field">Website</label>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Street Name</label>
 				  <div class="col-sm-4">
-					<input type="text" id="normal-field" class="form-control" name="website" value="<?php echo set_value('website',$before->website);?>">
+					<input type="text" id="normal-field" class="form-control" name="streetname" value="<?php echo set_value('streetname',$before->streetname);?>">
 				  </div>
 				</div>
-				<div class="form-group">
-				  <label class="col-sm-2 control-label" for="normal-field">Address</label>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Area</label>
 				  <div class="col-sm-4">
-					<input type="text" id="normal-field" class="form-control" name="address" value="<?php echo set_value('address',$before->address);?>">
+					<input type="text" id="normal-field" class="form-control" name="area" value="<?php echo set_value('area',$before->area);?>">
 				  </div>
 				</div>
-				<div class="form-group">
+				<div class=" form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">City</label>
 				  <div class="col-sm-4">
 					<input type="text" id="normal-field" class="form-control" name="city" value="<?php echo set_value('city',$before->city);?>">
 				  </div>
 				</div>
-				<div class="form-group">
-				  <label class="col-sm-2 control-label" for="normal-field">Pincode</label>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Pin Code</label>
 				  <div class="col-sm-4">
 					<input type="text" id="normal-field" class="form-control" name="pincode" value="<?php echo set_value('pincode',$before->pincode);?>">
 				  </div>
 				</div>
-				<div class="form-group">
+				
+				<div class=" form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Contact</label>
 				  <div class="col-sm-4">
-					<input type="number" id="normal-field" class="form-control" name="contact" value="<?php echo set_value('contact',$before->contact);?>">
+					<input type="numeric" id="normal-field" class="form-control" name="contact" value="<?php echo set_value('contact',$before->contact);?>">
 				  </div>
 				</div>
-				<div class="form-group">
-				  <label class="col-sm-2 control-label" for="normal-field">DOB</label>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">State</label>
 				  <div class="col-sm-4">
-					<input type="text" id="dp1" class="form-control" name="dob" value="<?php echo set_value('dob',$before->dob);?>">
+					<input type="text" id="normal-field" class="form-control" name="state" value="<?php echo set_value('state',$before->state);?>">
 				  </div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-2 control-label"> Facebook Userid</label>
-					<div class="col-sm-4">
-					  <input type="text" id="" name="facebookuserid" class="form-control" value="<?php echo set_value('facebookuserid',$before->facebookuserid); ?>">
-					</div>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">IP</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="ip" value="<?php echo set_value('ip',$before->ip);?>">
+				  </div>
+				</div>
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Loyalty Points</label>
+				  <div class="col-sm-4">
+					<input type="text" id="normal-field" class="form-control" name="loyaltypoints" value="<?php echo set_value('loyaltypoints',$before->loyaltypoints);?>">
+				  </div>
 				</div>
 				<div class="form-group">
 				  <label class="col-sm-2 control-label">Select Accesslevel</label>

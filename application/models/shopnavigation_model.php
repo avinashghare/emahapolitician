@@ -1,33 +1,27 @@
 <?php
 if ( !defined( 'BASEPATH' ) )
 	exit( 'No direct script access allowed' );
-class City_model extends CI_Model
+class Shopnavigation_model extends CI_Model
 {
 	
-	public function create($name)
-	{
-		$data  = array(
-			'name' => $name
-		);
-		$query=$this->db->insert( 'city', $data );
-//		$id = $this->db->insert_id();
-//		if($query)
-//		{
-//			$this->savelog($id,'Event Created');
-//		}
-		if(!$query)
-			return  0;
-		else
-			return  1;
-	}
-    public function createlocation($name,$cityid,$pincode)
+	public function create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)
 	{
 		$data  = array(
 			'name' => $name,
-			'pincode' => $pincode,
-            'cityid'=> $cityid
+			'shop' => $shop,
+			'alias' => $alias,
+			'order' => $order,
+			'status' => $status,
+			'metatitle' => $metatitle,
+			'metadescription' => $metadescription,
+			'banner' => $banner,
+			'bannerdescription' => $bannerdescription,
+			'isdefault' => $isdefault,
+			'type' => $type,
+			'sizes' => $sizes,
+			'positiononwebsite' => $positiononwebsite
 		);
-		$query=$this->db->insert( 'location', $data );
+		$query=$this->db->insert( 'shopnavigation', $data );
 //		$id = $this->db->insert_id();
 //		if($query)
 //		{
@@ -38,11 +32,61 @@ class City_model extends CI_Model
 		else
 			return  1;
 	}
-	function viewcity()
+	function viewshopnavigation()
 	{
-		$query="SELECT `city`.`id`, `city`.`name` FROM `city`";
+		$query="SELECT `shopnavigation`.`id`, `shopnavigation`.`name`, `shopnavigation`.`shop`, `shopnavigation`.`order`, `shopnavigation`.`status`, `positiononwebsite`, `shopnavigation`.`type`, `shopnavigation`.`description`, `shopnavigation`.`alias`, `shopnavigation`.`metatitle`, `shopnavigation`.`metadescription`, `shopnavigation`.`banner`, `shopnavigation`.`bannerdescription`, `shopnavigation`.`isdefault`, `shopnavigation`.`sizes`,`shop`.`name` AS `shopname`
+        FROM `shopnavigation`
+        LEFT OUTER JOIN `shop` ON `shop`.`id`=`shopnavigation`.`shop`";
 		$query=$this->db->query($query)->result();
 		return $query;
+	}
+    
+	public function getstatusdropdown()
+	{
+		$status= array(
+			 "1" => "Enabled",
+			 "0" => "Disabled",
+			);
+		return $status;
+	}
+	public function getisdefaultdropdown()
+	{
+		$isdefault= array(
+			 "1" => "Yes",
+			 "0" => "No",
+			);
+		return $isdefault;
+	}
+	public function gettypedropdown()
+	{
+		$type= array(
+			 "1" => "Static",
+			 "0" => "Category",
+			);
+		return $type;
+	}
+    
+	function changeshopnavigationstatus($id)
+	{
+		$query=$this->db->query("SELECT `status` FROM `shopnavigation` WHERE `id`='$id'")->row();
+		$status=$query->status;
+		if($status==1)
+		{
+			$status=0;
+		}
+		else if($status==0)
+		{
+			$status=1;
+		}
+		$data  = array(
+			'status' =>$status,
+		);
+		$this->db->where('id',$id);
+		$query=$this->db->update( 'shopnavigation', $data );
+		if(!$query)
+			return  0;
+		else
+			return  1;
 	}
 	function viewonecitylocations($id)
 	{
@@ -54,19 +98,13 @@ class City_model extends CI_Model
 	public function beforeedit( $id )
 	{
 		$this->db->where( 'id', $id );
-		$query['city']=$this->db->get( 'city' )->row();
-//		$query['eventcategory']=array();
-//		$eventcategory=$this->db->query("SELECT `category` FROM `eventcategory` WHERE `eventcategory`.`event`='$id'")->result();
-//		foreach($eventcategory as $cat)
-//		{
-//			$query['eventcategory'][]=$cat->category;
-//		}
-//		$query['eventtopic']=array();
-//		$eventtopic=$this->db->query("SELECT `topic` FROM `eventtopic` WHERE `eventtopic`.`event`='$id'")->result();
-//		foreach($eventtopic as $top)
-//		{
-//			$query['eventtopic'][]=$top->topic;
-//		}
+		$query['shopnavigation']=$this->db->get( 'shopnavigation' )->row();
+		return $query;
+	}
+    
+	public function getbannerbyid($id)
+	{
+		$query=$this->db->query("SELECT `banner` FROM `shopnavigation` WHERE `id`='$id'")->row();
 		return $query;
 	}
 	public function beforeeditlocation( $id )
@@ -88,18 +126,30 @@ class City_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name)
+	public function edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)
 	{
 		$data  = array(
-			'name' => $name
+			'name' => $name,
+			'shop' => $shop,
+			'alias' => $alias,
+			'order' => $order,
+			'status' => $status,
+			'metatitle' => $metatitle,
+			'metadescription' => $metadescription,
+			'banner' => $banner,
+			'bannerdescription' => $bannerdescription,
+			'isdefault' => $isdefault,
+			'type' => $type,
+			'sizes' => $sizes,
+			'positiononwebsite' => $positiononwebsite
 		);
 		
 		$this->db->where( 'id', $id );
-		$query=$this->db->update( 'city', $data );
-		if($query)
-		{
-			$this->savelog($id,'City Edited');
-		}
+		$query=$this->db->update( 'shopnavigation', $data );
+//		if($query)
+//		{
+//			$this->savelog($id,'Shop Navigation Edited');
+//		}
 		return 1;
 	}
 	public function editlocation($id,$cityid,$name,$pincode)
@@ -118,13 +168,9 @@ class City_model extends CI_Model
 		}
 		return 1;
 	}
-	function deletecity($id)
+	function deleteshopnavigation($id)
 	{
-		$query=$this->db->query("DELETE FROM `city` WHERE `id`='$id'");
-	}
-	function deletelocation($id)
-	{
-		$query=$this->db->query("DELETE FROM `location` WHERE `id`='$id'");
+		$query=$this->db->query("DELETE FROM `shopnavigation` WHERE `id`='$id'");
 	}
 	
 	public function getevent()

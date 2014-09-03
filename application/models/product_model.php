@@ -1,23 +1,22 @@
 <?php
 if ( !defined( 'BASEPATH' ) )
 	exit( 'No direct script access allowed' );
-class Brand_model extends CI_Model
+class Product_model extends CI_Model
 {
 	
-	public function create($name,$website,$facebook,$twitter,$pininterest,$googleplus,$instagram,$blog,$description)
+	public function create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)
 	{
 		$data  = array(
 			'name' => $name,
-			'website' => $website,
-			'facebookpage' => $facebook,
-			'twitterpage' => $twitter,
-			'pininterest' => $pininterest,
-			'googleplus' => $googleplus,
-			'instagram' => $instagram,
-			'blog' => $blog,
-			'description' => $description,
+			'alias' => $alias,
+			'shop' => $shop,
+			'stock' => $stock,
+			'ean' => $ean,
+			'tax' => $tax,
+			'metatitle' => $metatitle,
+			'metadescription' => $metadescription
 		);
-		$query=$this->db->insert( 'brand', $data );
+		$query=$this->db->insert( 'product', $data );
 		$id = $this->db->insert_id();
 //		if($query)
 //		{
@@ -28,6 +27,50 @@ class Brand_model extends CI_Model
 		else
 			return  $id;
 	}
+	function viewproduct()
+	{
+		$query="SELECT `product`.`id`,`product`.`name` AS `productname`, `product`.`alias`, `product`.`shop`, `product`.`metatitle`, `product`.`metadescription`, `product`.`stock`, `product`.`ean`, `product`.`tax`,`shop`.`name` AS `shopname` FROM `product` LEFT OUTER JOIN `shop` ON `shop`.`id`=`product`.`shop`";
+		$query=$this->db->query($query)->result();
+		return $query;
+	}
+    
+    public function beforeedit( $id )
+	{
+		$this->db->where( 'id', $id );
+		$query['product']=$this->db->get( 'product' )->row();
+		return $query;
+	}
+    
+    
+	public function edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)
+	{
+		$data  = array(
+			'name' => $name,
+			'alias' => $alias,
+			'shop' => $shop,
+			'stock' => $stock,
+			'ean' => $ean,
+			'tax' => $tax,
+			'metatitle' => $metatitle,
+			'metadescription' => $metadescription
+		);
+		
+		$this->db->where( 'id', $id );
+		$query=$this->db->update( 'product', $data );
+//		if($query)
+//		{
+//			$this->savelog($id,'Product Edited');
+//		}
+		return 1;
+	}
+    
+    
+	function deleteproduct($id)
+	{
+		$query=$this->db->query("DELETE FROM `product` WHERE `id`='$id'");
+	}
+    
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function createsubcategory($brandid,$categoryid)
 	{
 		$data  = array(
@@ -92,12 +135,6 @@ LEFT OUTER JOIN  `category` ON  `category`.`id` =  `brandcategory`.`categoryid` 
 		else
 			return  1;
 	}
-	function viewbrand()
-	{
-		$query="SELECT `brand`.`id`, `brand`.`name`, `brand`.`pricerange`,`pricerange`.`range` AS `rangename`, `brand`.`video`, `brand`.`description`, `brand`.`facebookpage`, `brand`.`website`, `brand`.`twitterpage`, `brand`.`logo` FROM `brand` LEFT OUTER JOIN `pricerange` ON `pricerange`.`id`=`brand`.`pricerange`";
-		$query=$this->db->query($query)->result();
-		return $query;
-	}
 	function viewonebrand($id)
 	{
 		$query="SELECT `brand`.`id`, `brand`.`name`, `brand`.`pricerange`,`pricerange`.`range` AS `rangename`, `brand`.`video`, `brand`.`description`, `brand`.`facebookpage`, `brand`.`website`, `brand`.`twitterpage`, `brand`.`logo` FROM `brand` LEFT OUTER JOIN `pricerange` ON `pricerange`.`id`=`brand`.`pricerange` WHERE `brand`.`id`='$id'";
@@ -111,10 +148,10 @@ LEFT OUTER JOIN  `category` ON  `category`.`id` =  `brandcategory`.`categoryid` 
 		$query=$this->db->query($query)->result();
 		return $query;
 	}
-	public function beforeedit( $id )
-	{
-		$this->db->where( 'id', $id );
-		$query['brand']=$this->db->get( 'brand' )->row();
+//	public function beforeedit( $id )
+//	{
+//		$this->db->where( 'id', $id );
+//		$query['brand']=$this->db->get( 'brand' )->row();
 //		$query['eventcategory']=array();
 //		$eventcategory=$this->db->query("SELECT `category` FROM `eventcategory` WHERE `eventcategory`.`event`='$id'")->result();
 //		foreach($eventcategory as $cat)
@@ -127,8 +164,8 @@ LEFT OUTER JOIN  `category` ON  `category`.`id` =  `brandcategory`.`categoryid` 
 //		{
 //			$query['eventtopic'][]=$top->topic;
 //		}
-		return $query;
-	}
+//		return $query;
+//	}
 	public function beforeeditlocation( $id )
 	{
 		$this->db->where( 'id', $id );
@@ -148,28 +185,6 @@ LEFT OUTER JOIN  `category` ON  `category`.`id` =  `brandcategory`.`categoryid` 
 		return $query;
 	}
 	
-	public function edit($id,$name,$website,$facebook,$twitter,$pininterest,$googleplus,$instagram,$blog,$description)
-	{
-		$data  = array(
-			'name' => $name,
-			'website' => $website,
-			'facebookpage' => $facebook,
-			'twitterpage' => $twitter,
-			'pininterest' => $pininterest,
-			'googleplus' => $googleplus,
-			'instagram' => $instagram,
-			'blog' => $blog,
-			'description' => $description,
-		);
-		
-		$this->db->where( 'id', $id );
-		$query=$this->db->update( 'brand', $data );
-		if($query)
-		{
-			$this->savelog($id,'Brand Edited');
-		}
-		return 1;
-	}
     public function editbrand($id,$name,$website,$facebook,$twitter,$pininterest,$googleplus,$instagram,$blog,$description)
 	{
 		$data  = array(
