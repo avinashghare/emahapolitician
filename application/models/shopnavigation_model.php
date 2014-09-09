@@ -4,7 +4,7 @@ if ( !defined( 'BASEPATH' ) )
 class Shopnavigation_model extends CI_Model
 {
 	
-	public function create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)
+	public function create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite,$filtergroup)
 	{
 		$data  = array(
 			'name' => $name,
@@ -22,6 +22,12 @@ class Shopnavigation_model extends CI_Model
 			'positiononwebsite' => $positiononwebsite
 		);
 		$query=$this->db->insert( 'shopnavigation', $data );
+        $shopnavigationid=$this->db->insert_id();
+//        print_r($filtergroup);
+        foreach($filtergroup AS $key=>$value)
+            {
+                $this->shopnavigation_model->createshopnavigationbyfiltergroup($value,$shopnavigationid);
+            }
 //		$id = $this->db->insert_id();
 //		if($query)
 //		{
@@ -31,6 +37,17 @@ class Shopnavigation_model extends CI_Model
 			return  0;
 		else
 			return  1;
+	}
+    
+    public function createshopnavigationbyfiltergroup($value,$shopnavigationid)
+	{
+		$data  = array(
+			'shopnavigation' =>$shopnavigationid,
+			'filtergroup' => $value
+		);
+        print_r($data);
+		$query=$this->db->insert( 'shopnav_filtergroup', $data );
+		return  1;
 	}
 	function viewshopnavigation()
 	{
@@ -126,7 +143,7 @@ class Shopnavigation_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)
+	public function edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite,$filtergroup)
 	{
 		$data  = array(
 			'name' => $name,
@@ -146,6 +163,11 @@ class Shopnavigation_model extends CI_Model
 		
 		$this->db->where( 'id', $id );
 		$query=$this->db->update( 'shopnavigation', $data );
+        $querydelete=$this->db->query("DELETE FROM `shopnav_filtergroup` WHERE `shopnavigation`='$id'");
+        foreach($filtergroup AS $key=>$value)
+            {
+                $this->shopnavigation_model->createshopnavigationbyfiltergroup($value,$id);
+            }
 //		if($query)
 //		{
 //			$this->savelog($id,'Shop Navigation Edited');

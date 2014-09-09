@@ -2926,6 +2926,7 @@ class Site extends CI_Controller
 		$data[ 'page' ] = 'createshopnavigation';
 		$data[ 'title' ] = 'Create Shopnavigation';
         $data['user']=$this->shop_model->getshopdropdown();
+        $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
 //        $data['user']=$this->user_model->getuserdropdown();
 		$data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
 		$data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
@@ -2944,6 +2945,7 @@ class Site extends CI_Controller
 		$this->form_validation->set_rules('metadescription','metadescription','trim');
 		$this->form_validation->set_rules('bannerdescription','bannerdescription','trim');
 		$this->form_validation->set_rules('positiononwebsite','positiononwebsite','trim');
+//		$this->form_validation->set_rules('filtergroup','filtergroup');
 		$this->form_validation->set_rules('sizes','sizes','trim');
 		$this->form_validation->set_rules('status','status','trim');
 		$this->form_validation->set_rules('isdefault','isdefault','trim');
@@ -2955,6 +2957,7 @@ class Site extends CI_Controller
 			$data['page']='createshopnavigation';
 			$data['title']='Create New Shopnavigation';
             $data['user']=$this->shop_model->getshopdropdown();
+            $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
             $data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
             $data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
             $data[ 'type' ] =$this->shopnavigation_model->gettypedropdown();
@@ -2971,10 +2974,11 @@ class Site extends CI_Controller
 			$positiononwebsite=$this->input->post('positiononwebsite');
 			$metatitle=$this->input->post('metatitle');
 			$metadescription=$this->input->post('metadescription');
+			$filtergroup=$this->input->post('filtergroup');
 			$bannerdescription=$this->input->post('bannerdescription');
 			$isdefault=$this->input->post('isdefault');
 			$type=$this->input->post('type');
-			
+			print_r($filtergroup);
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
 			$this->load->library('upload', $config);
@@ -2985,9 +2989,9 @@ class Site extends CI_Controller
 				$uploaddata = $this->upload->data();
 				$banner=$uploaddata['file_name'];
 			}
-			if($this->shopnavigation_model->create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)==0)
+			if($this->shopnavigation_model->create($name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite,$filtergroup)==0)
 			$data['alerterror']="New Shop Navigation could not be created.";
-			else
+			//else
 			$data['alertsuccess']="Shop Navigation created Successfully.";
 			
 			$data['table']=$this->shopnavigation_model->viewshopnavigation();
@@ -3003,6 +3007,8 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data['before']=$this->shopnavigation_model->beforeedit($this->input->get('id'));
         $data['user']=$this->shop_model->getshopdropdown();
+        $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
+        $data['selectedfiltergroup']=$this->filtergroup_model->getshopnavbyfiltergroup($this->input->get('id'));
 //        $data['user']=$this->user_model->getuserdropdown();
 		$data[ 'status' ] =$this->shopnavigation_model->getstatusdropdown();
 		$data[ 'isdefault' ] =$this->shopnavigation_model->getisdefaultdropdown();
@@ -3053,10 +3059,11 @@ class Site extends CI_Controller
 			$positiononwebsite=$this->input->post('positiononwebsite');
 			$metatitle=$this->input->post('metatitle');
 			$metadescription=$this->input->post('metadescription');
+			$filtergroup=$this->input->post('filtergroup');
 			$bannerdescription=$this->input->post('bannerdescription');
 			$isdefault=$this->input->post('isdefault');
 			$type=$this->input->post('type');
-			
+			//print_r($filtergroup);
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
 			$this->load->library('upload', $config);
@@ -3074,7 +3081,7 @@ class Site extends CI_Controller
                 $banner=$banner->banner;
             }
 //            print_r($banner);
-			if($this->shopnavigation_model->edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite)==0)
+			if($this->shopnavigation_model->edit($id,$name,$alias,$shop,$order,$status,$metatitle,$metadescription,$banner,$bannerdescription,$isdefault,$type,$sizes,$positiononwebsite,$filtergroup)==0)
 			$data['alerterror']="shop Navigation Editing was unsuccesful";
 			else
 			$data['alertsuccess']="shop Navigation edited Successfully.";
@@ -3360,6 +3367,7 @@ class Site extends CI_Controller
 	{
 		$access = array("1");
 		$this->checkaccess($access);
+        $data['attribute']=$this->attribute_model->getattributedropdown();
 		$data[ 'page' ] = 'createfiltergroup';
 		$data[ 'title' ] = 'Create filtergroup';
 		$this->load->view( 'template', $data );	
@@ -3369,19 +3377,23 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('attribute','attribute','required');
         
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
-		$data[ 'page' ] = 'createfiltergroup';
-		$data[ 'title' ] = 'Create filtergroup';
-		$this->load->view( 'template', $data );
+            $data['attribute']=$this->attribute_model->getattributedropdown();
+            $data[ 'page' ] = 'createfiltergroup';
+            $data[ 'title' ] = 'Create filtergroup';
+            $this->load->view( 'template', $data );
 		}
 		else
 		{
 			$name=$this->input->post('name');
+			$attribute=$this->input->post('attribute');
+            print_r($attribute);
 			
-			if($this->filtergroup_model->create($name)==0)
+			if($this->filtergroup_model->create($name,$attribute)==0)
 			$data['alerterror']="New filtergroup could not be created.";
 			else
 			$data['alertsuccess']="filtergroup created Successfully.";
@@ -3397,7 +3409,9 @@ class Site extends CI_Controller
 	{
 		$access = array("1");
 		$this->checkaccess($access);
+        $data['attribute']=$this->attribute_model->getattributedropdown();
 		$data['before']=$this->filtergroup_model->beforeedit($this->input->get('id'));
+        $data['selectedattribute']=$this->attribute_model->getfiltergroupbyattribute($this->input->get('id'));
 		$data['page']='editfiltergroup';
 		$data['title']='Edit filtergroup';
 		$this->load->view('template',$data);
@@ -3407,11 +3421,14 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('attribute','attribute','required');
         
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
             $data['before']=$this->filtergroup_model->beforeedit($this->input->get('id'));
+            $data['attribute']=$this->attribute_model->getattributedropdown();
+            $data['selectedattribute']=$this->attribute_model->getfiltergroupbyattribute($this->input->get('id'));
             $data['page']='editfiltergroup';
             $data['title']='Edit filtergroup';
             $this->load->view('template',$data);
@@ -3420,7 +3437,8 @@ class Site extends CI_Controller
 		{
 			$id=$this->input->get_post('id');
 			$name=$this->input->post('name');
-			if($this->filtergroup_model->edit($id,$name)==0)
+			$attribute=$this->input->post('attribute');
+			if($this->filtergroup_model->edit($id,$name,$attribute)==0)
 			$data['alerterror']="filtergroup Editing was unsuccesful";
 			else
 			$data['alertsuccess']="filtergroup edited Successfully.";

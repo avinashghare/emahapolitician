@@ -40,6 +40,36 @@ class Attribute_model extends CI_Model
 		$query=$this->db->query("DELETE FROM `attribute` WHERE `id`='$id'");
 		
 	}
+    
+     public function getattributedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `attribute`  ORDER BY `id` ASC")->result();
+		$return=array();
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
+    
+     public function getfiltergroupbyattribute($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`attribute`,`filtergroup` FROM `filtergroup_attribute`  WHERE `filtergroup`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->attribute;
+            }
+        }
+         return $return;
+         
+		
+	}
 	public function getofferdropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `offers`  ORDER BY `id` ASC")->result();
