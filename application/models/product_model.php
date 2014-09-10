@@ -4,7 +4,7 @@ if ( !defined( 'BASEPATH' ) )
 class Product_model extends CI_Model
 {
 	
-	public function create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)
+	public function create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription,$shopnavigation,$tags,$attribute)
 	{
 		$data  = array(
 			'name' => $name,
@@ -18,6 +18,19 @@ class Product_model extends CI_Model
 		);
 		$query=$this->db->insert( 'product', $data );
 		$id = $this->db->insert_id();
+         $productid=$this->db->insert_id();
+        foreach($shopnavigation AS $key=>$value)
+            {
+                $this->product_model->createshopnavigationbyproduct($value,$productid);
+            }
+        foreach($tags AS $key=>$value)
+            {
+                $this->product_model->createtagsbyproduct($value,$productid);
+            }
+        foreach($attribute AS $key=>$value)
+            {
+                $this->product_model->createattributebyproduct($value,$productid);
+            }
 //		if($query)
 //		{
 //			$this->savelog($id,'Event Created');
@@ -26,6 +39,33 @@ class Product_model extends CI_Model
 			return  0;
 		else
 			return  $id;
+	}
+    public function createshopnavigationbyproduct($value,$productid)
+	{
+		$data  = array(
+			'shopnav' =>$value,
+			'product' => $productid
+		);
+		$query=$this->db->insert( 'shopnav_product', $data );
+		return  1;
+	}
+    public function createattributebyproduct($value,$productid)
+	{
+		$data  = array(
+			'attribute' =>$value,
+			'product' => $productid
+		);
+		$query=$this->db->insert( 'product_attribute', $data );
+		return  1;
+	}
+    public function createtagsbyproduct($value,$productid)
+	{
+		$data  = array(
+			'tag' =>$value,
+			'product' => $productid
+		);
+		$query=$this->db->insert( 'product_tag', $data );
+		return  1;
 	}
 	function viewproduct()
 	{
@@ -42,7 +82,7 @@ class Product_model extends CI_Model
 	}
     
     
-	public function edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)
+	public function edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription,$shopnavigation,$tags,$attribute)
 	{
 		$data  = array(
 			'name' => $name,
@@ -57,6 +97,21 @@ class Product_model extends CI_Model
 		
 		$this->db->where( 'id', $id );
 		$query=$this->db->update( 'product', $data );
+        $querydelete=$this->db->query("DELETE FROM `shopnav_product` WHERE `product`='$id'");
+        $querydelete=$this->db->query("DELETE FROM `product_attribute` WHERE `product`='$id'");
+        $querydelete=$this->db->query("DELETE FROM `product_tag` WHERE `product`='$id'");
+        foreach($shopnavigation AS $key=>$value)
+            {
+                $this->product_model->createshopnavigationbyproduct($value,$id);
+            }
+        foreach($tags AS $key=>$value)
+            {
+                $this->product_model->createtagsbyproduct($value,$id);
+            }
+        foreach($attribute AS $key=>$value)
+            {
+                $this->product_model->createattributebyproduct($value,$id);
+            }
 //		if($query)
 //		{
 //			$this->savelog($id,'Product Edited');

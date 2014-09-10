@@ -3137,6 +3137,10 @@ class Site extends CI_Controller
 		$data[ 'page' ] = 'createproduct';
 		$data[ 'title' ] = 'Create product';
         $data['shop']=$this->shop_model->getshopdropdown();
+        $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
+        $data['tags']=$this->attribute_model->gettagsdropdown();
+        $data['shopnavigation']=$this->shopnavigation_model->getshopnavigationdropdown();
+        $data['attribute']=$this->attribute_model->getattributedropdown();
         $data['user']=$this->user_model->getuserdropdown();
 		$this->load->view( 'template', $data );	
 	}
@@ -3159,6 +3163,11 @@ class Site extends CI_Controller
 			$data['page']='createproduct';
 			$data['title']='Create New Product';
             $data['shop']=$this->shop_model->getshopdropdown();
+            $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
+            $data['tags']=$this->attribute_model->gettagsdropdown();
+            $data['shopnavigation']=$this->shopnavigation_model->getshopnavigationdropdown();
+            $data['attribute']=$this->attribute_model->getattributedropdown();
+            $data['user']=$this->user_model->getuserdropdown();
 			$this->load->view('template',$data);
 		}
 		else
@@ -3171,8 +3180,11 @@ class Site extends CI_Controller
 			$tax=$this->input->post('tax');
 			$metatitle=$this->input->post('metatitle');
 			$metadescription=$this->input->post('metadescription');
+			$shopnavigation=$this->input->post('shopnavigation');
+			$tags=$this->input->post('tags');
+			$attribute=$this->input->post('attribute');
 			
-			if($this->product_model->create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)==0)
+			if($this->product_model->create($name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription,$shopnavigation,$tags,$attribute)==0)
 			$data['alerterror']="New Product could not be created.";
 			else
 			$data['alertsuccess']="Product created Successfully.";
@@ -3190,6 +3202,15 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data['before']=$this->product_model->beforeedit($this->input->get('id'));
         $data['shop']=$this->shop_model->getshopdropdown();
+        $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
+        $data['tags']=$this->attribute_model->gettagsdropdown();
+        $data['shopnavigation']=$this->shopnavigation_model->getshopnavigationdropdown();
+        $data['attribute']=$this->attribute_model->getattributedropdown();
+        $data['user']=$this->user_model->getuserdropdown();
+        
+        $data['selectedshopnavigation']=$this->shopnavigation_model->getshopnavigationbyproduct($this->input->get('id'));
+        $data['selectedattribute']=$this->attribute_model->getattributebyproduct($this->input->get('id'));
+        $data['selectedtags']=$this->attribute_model->gettagsbyproduct($this->input->get('id'));
 		$data['page']='editproduct';
 		$data['title']='Edit product';
 		$this->load->view('template',$data);
@@ -3212,6 +3233,15 @@ class Site extends CI_Controller
 			$data['alerterror'] = validation_errors();
 			$data['before']=$this->product_model->beforeedit($this->input->get('id'));
             $data['shop']=$this->shop_model->getshopdropdown();
+            $data['filtergroup']=$this->filtergroup_model->getfiltergroupdropdown();
+            $data['tags']=$this->attribute_model->gettagsdropdown();
+            $data['shopnavigation']=$this->shopnavigation_model->getshopnavigationdropdown();
+            $data['attribute']=$this->attribute_model->getattributedropdown();
+            $data['user']=$this->user_model->getuserdropdown();
+
+            $data['selectedshopnavigation']=$this->shopnavigation_model->getshopnavigationbyproduct($this->input->get('id'));
+            $data['selectedattribute']=$this->attribute_model->getattributebyproduct($this->input->get('id'));
+            $data['selectedtags']=$this->attribute_model->gettagsbyproduct($this->input->get('id'));
             $data['page']='editproduct';
             $data['title']='Edit product';
             $this->load->view('template',$data);
@@ -3227,8 +3257,11 @@ class Site extends CI_Controller
 			$tax=$this->input->post('tax');
 			$metatitle=$this->input->post('metatitle');
 			$metadescription=$this->input->post('metadescription');
+			$shopnavigation=$this->input->post('shopnavigation');
+			$tags=$this->input->post('tags');
+			$attribute=$this->input->post('attribute');
             
-			if($this->product_model->edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription)==0)
+			if($this->product_model->edit($id,$name,$alias,$shop,$stock,$ean,$tax,$metatitle,$metadescription,$shopnavigation,$tags,$attribute)==0)
 			$data['alerterror']="product Editing was unsuccesful";
 			else
 			$data['alertsuccess']="product edited Successfully.";

@@ -194,6 +194,18 @@ class Shopnavigation_model extends CI_Model
 	{
 		$query=$this->db->query("DELETE FROM `shopnavigation` WHERE `id`='$id'");
 	}
+     public function getshopnavigationdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `shopnavigation`  ORDER BY `id` ASC")->result();
+		$return=array();
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
 	
 	public function getevent()
 	{
@@ -293,6 +305,22 @@ class Shopnavigation_model extends CI_Model
 	}
     //-----------------Changes made avinash
     
+     public function getshopnavigationbyproduct($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`shopnav`,`product` FROM `shopnav_product`  WHERE `product`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->shopnav;
+            }
+        }
+         return $return;
+         
+		
+	}
     
     //------------------------
 }

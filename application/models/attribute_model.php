@@ -53,6 +53,18 @@ class Attribute_model extends CI_Model
 		return $return;
 	}
     
+     public function gettagsdropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `tags`  ORDER BY `id` ASC")->result();
+		$return=array();
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
+    
     
      public function getfiltergroupbyattribute($id)
 	{
@@ -97,6 +109,38 @@ class Attribute_model extends CI_Model
 			 "0" => "Disabled",
 			);
 		return $status;
+	}
+    public function getattributebyproduct($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`attribute`,`product` FROM `product_attribute`  WHERE `product`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->attribute;
+            }
+        }
+         return $return;
+         
+		
+	}
+    public function gettagsbyproduct($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`tag`,`product` FROM `product_tag`  WHERE `product`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->tag;
+            }
+        }
+         return $return;
+         
+		
 	}
 }
 ?>

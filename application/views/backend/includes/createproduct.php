@@ -15,24 +15,8 @@ echo $user[1];?>
 			</header>
 			<div class="panel-body">
 			  <form class="form-horizontal tasi-form" method="post" action="<?php echo site_url('site/createproductsubmit');?>" enctype= "multipart/form-data">
+	            
 				
-<!--
-				<div class="form-group">
-				  <label class="col-sm-2 control-label" for="normal-field">jhbjh</label>
-				  <div class="col-sm-4">
-				  <select multiple id="e1" style="width:300px">
-                      
-                        <option value="Am">Amalapuram</option>
-                        <option value="An">Anakapalli</option>
-                        <option value="Ak">Akkayapalem</option>
-                        <option value="WY">Wyoming</option>
-                    </select>
-                <input type="checkbox" id="checkbox" >Select All
-
-					<input type="text" id="normal-field" class="form-control" name="name" value="<?php echo set_value('name');?>">
-				  </div>
-				</div>
--->
 				
 				
 				<div class="form-group">
@@ -57,6 +41,47 @@ echo $user[1];?>
 						echo form_dropdown('shop',$shop,set_value('shop'),'id="select4" class="chzn-select form-control"');
 					?>
 				  </div>
+				</div>
+				
+	            <div class="form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Add Shop Navigation</label>
+                      <div class="col-sm-4">
+                      <?php 
+                                    echo form_dropdown('shopnavigation[]', $shopnavigation,$shopnavigation,'id="select1" class="form-control populate placeholder " multiple="multiple"');
+
+                                ?>
+
+                      </div>
+                      <div class="col-md-4">
+                            <input type="checkbox" id="checkbox1" >Select All
+                        </div>
+				</div>
+				<div class="form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Add Tags</label>
+                      <div class="col-sm-4">
+                      <?php 
+                                    echo form_dropdown('tags[]', $tags,$tags,'id="select5" class="form-control populate placeholder " multiple="multiple"');
+
+                                ?>
+
+                      </div>
+                      <div class="col-md-4">
+                            <input type="checkbox" id="checkbox" >Select All
+                        </div>
+				</div>
+				
+	            <div class="form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Add Attribute</label>
+                      <div class="col-sm-4">
+                      <?php 
+                                    echo form_dropdown('attribute[]', $attribute,$attribute,'id="select2" class="form-control populate placeholder " multiple="multiple"');
+
+                                ?>
+
+                      </div>
+                      <div class="col-md-4">
+                            <input type="checkbox" id="checkbox2" >Select All
+                        </div>
 				</div>
 				
 				<div class="form-group">
@@ -106,21 +131,89 @@ echo $user[1];?>
 		</section>
 	</div>
 </div>
+<!--
 <script>
     $(document).ready(function() { 
-$("#e1").select2();
+$("#select5").select2();
 $("#checkbox").click(function(){
     if($("#checkbox").is(':checked') ){
-        $("#e1 > option").prop("selected","selected");
-        $("#e1").trigger("change");
+        $("#select5 > option").prop("selected","selected");
+        $("#select5").trigger("change");
     }else{
-        $("#e1 > option").removeAttr("selected");
-         $("#e1").trigger("change");
+        $("#select5 > option").removeAttr("selected");
+         $("#select5").trigger("change");
      }
 });
 
 $("#button").click(function(){
-       alert($("#e1").val());
+       alert($("#select5").val());
 });
     })
 </script>
+-->
+<script>
+    $(document).ready(function() {
+        $("#select5").select2();
+$("#checkbox").click(function(){
+    if($("#checkbox").is(':checked') ){
+        $("#select5 > option").prop("selected","selected");
+        $("#select5").trigger("change");
+    }else{
+        $("#select5 > option").removeAttr("selected");
+         $("#select5").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select5").val());
+});
+        
+$("#select1").select2();
+$("#checkbox1").click(function(){
+    if($("#checkbox1").is(':checked') ){
+        $("#select1 > option").prop("selected","selected");
+        $("#select1").trigger("change");
+    }else{
+        $("#select1 > option").removeAttr("selected");
+         $("#select1").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select1").val());
+});
+        $("#select2").select2();
+$("#checkbox2").click(function(){
+    if($("#checkbox2").is(':checked') ){
+        $("#select2 > option").prop("selected","selected");
+        $("#select2").trigger("change");
+    }else{
+        $("#select2 > option").removeAttr("selected");
+         $("#select2").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select2").val());
+});
+    })
+</script>
+<!--
+<script>
+    $(document).ready(function() { 
+$("#select2").select2();
+$("#checkbox2").click(function(){
+    if($("#checkbox2").is(':checked') ){
+        $("#select2 > option").prop("selected","selected");
+        $("#select2").trigger("change");
+    }else{
+        $("#select2 > option").removeAttr("selected");
+         $("#select2").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select2").val());
+});
+    })
+</script>-->
