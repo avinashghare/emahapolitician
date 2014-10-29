@@ -48,11 +48,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-//
+//for server side database connection
+
 //$db['default']['hostname'] = 'localhost';
-//$db['default']['username'] = 'mafiawar_91str';
+//$db['default']['username'] = 'mafiawar_eshop';
 //$db['default']['password'] = 'chintan123';
-//$db['default']['database'] = 'mafiawar_91street';
+//$db['default']['database'] = 'mafiawar_eshop';
 //$db['default']['dbdriver'] = 'mysql';
 //$db['default']['dbprefix'] = '';
 //$db['default']['pconnect'] = TRUE;
@@ -65,6 +66,7 @@ $active_record = TRUE;
 //$db['default']['autoinit'] = TRUE;
 //$db['default']['stricton'] = FALSE;
 
+//for local sidedatabase connection
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';

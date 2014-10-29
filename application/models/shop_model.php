@@ -99,9 +99,7 @@ class Shop_model extends CI_Model
      public function getshopdropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `shop`  ORDER BY `id` ASC")->result();
-		$return=array(
-		"" => ""
-		);
+		$return=array();
 		foreach($query as $row)
 		{
 			$return[$row->id]=$row->name;
@@ -110,6 +108,32 @@ class Shop_model extends CI_Model
 		return $return;
 	}
     
+     public function createshopbyuser($value,$id)
+	{
+		$data  = array(
+			'shop' =>$value,
+			'user' => $id
+		);
+       // print_r($data);
+		$query=$this->db->insert( 'usershop', $data );
+		return  1;
+	}
+    public function getshopsbyuser($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`shop`,`user` FROM `usershop`  WHERE `user`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->shop;
+            }
+        }
+         return $return;
+         
+		
+	}
     
 	function deleteshop($id)
 	{

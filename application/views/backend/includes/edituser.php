@@ -78,6 +78,19 @@
 					<input type="text" id="normal-field" class="form-control" name="ip" value="<?php echo set_value('ip',$before->ip);?>">
 				  </div>
 				</div>
+				<div class="form-group">
+                        <label class="col-sm-2 control-label" for="normal-field">Add Logins</label>
+                          <div class="col-sm-4">
+                          <?php 
+                                        echo form_dropdown('logins[]', $logins,$selectedlogins,'id="select5" class="form-control populate placeholder " multiple="multiple"');
+
+                                    ?>
+
+                          </div>
+                          <div class="col-md-4">
+                            <input type="checkbox" id="checkbox" >Select All
+                          </div>
+                    </div>
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label" for="normal-field">Loyalty Points</label>
 				  <div class="col-sm-4">
@@ -101,6 +114,19 @@
 					?>
 				  </div>
 				</div>
+				<div class="form-group">
+                        <label class="col-sm-2 control-label" for="normal-field">Customer Of</label>
+                          <div class="col-sm-4">
+                          <?php 
+                                        echo form_dropdown('shops[]', $shops,$selectedshops,'id="select1" class="form-control populate placeholder " multiple="multiple"');
+
+                                    ?>
+
+                          </div>
+                          <div class="col-md-4">
+                            <input type="checkbox" id="checkbox1" >Select All
+                          </div>
+                    </div>
 				<div class=" form-group">
 				  <label class="col-sm-2 control-label">&nbsp;</label>
 				  <div class="col-sm-4">
@@ -111,3 +137,34 @@
 			  </form>
 			</div>
 		</section>
+<script>
+    $(document).ready(function() { 
+//$("#e1").select2();
+$("#checkbox").click(function(){
+    if($("#checkbox").is(':checked') ){
+        $("#select5 > option").prop("selected","selected");
+        $("#select5").trigger("change");
+    }else{
+        $("#select5 > option").removeAttr("selected");
+         $("#select5").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select5").val());
+});
+   $("#checkbox1").click(function(){
+    if($("#checkbox1").is(':checked') ){
+        $("#select1 > option").prop("selected","selected");
+        $("#select1").trigger("change");
+    }else{
+        $("#select1 > option").removeAttr("selected");
+         $("#select1").trigger("change");
+     }
+});
+
+$("#button").click(function(){
+       alert($("#select1").val());
+});
+    })
+</script>

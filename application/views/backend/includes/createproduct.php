@@ -5,8 +5,9 @@
 		</div>
 	</div>
 </div>
-<?php     print_r($user);
-echo $user[1];?>
+<?php    // print_r($user);
+//echo $user[1];
+?>
 <div class="row">
 	<div class="col-lg-12">
 	    <section class="panel">

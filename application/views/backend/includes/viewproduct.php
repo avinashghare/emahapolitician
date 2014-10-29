@@ -11,7 +11,9 @@
 			<header class="panel-heading">
                 Product Details
             </header>
-            <?php print_r($table); ?>
+            <?php 
+//print_r($table);
+            ?>
 			<table class="table table-striped table-hover fpTable lcnp" cellpadding="0" cellspacing="0" width="100%">
 			<thead>
 				<tr>

@@ -32,7 +32,7 @@ class User_model extends CI_Model
 	}
 	
 	
-	public function create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)
+	public function create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode,$shops,$logins)
 	{
 		$data  = array(
 			'firstname' => $firstname,
@@ -52,6 +52,14 @@ class User_model extends CI_Model
 		);
 		$query=$this->db->insert( 'user', $data );
 		$id=$this->db->insert_id();
+        foreach($shops AS $key=>$value)
+        {
+            $this->shop_model->createshopbyuser($value,$id);
+        }
+        foreach($logins AS $key=>$value)
+        {
+            $this->user_model->createloginuserbyuser($value,$id);
+        }
 //		if($query)
 //		{
 //			$this->saveuserlog($id,'User Created');
@@ -60,6 +68,34 @@ class User_model extends CI_Model
 			return  0;
 		else
 			return  1;
+	}
+    
+     public function getloginsbyuser($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`otheruser`,`user` FROM `userlogin`  WHERE `user`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->otheruser;
+            }
+        }
+         return $return;
+         
+		
+	}
+    
+     public function createloginuserbyuser($value,$id)
+	{
+		$data  = array(
+			'otheruser' =>$value,
+			'user' => $id
+		);
+       // print_r($data);
+		$query=$this->db->insert( 'userlogin', $data );
+		return  1;
 	}
 	function viewusers()
 	{
@@ -88,7 +124,7 @@ class User_model extends CI_Model
 		return $query;
 	}
 	
-	public function edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)
+	public function edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode,$shops,$logins)
 	{
 		$data  = array(
 			'firstname' => $firstname,
@@ -108,6 +144,16 @@ class User_model extends CI_Model
 			$data['password'] =md5($password);
 		$this->db->where( 'id', $id );
 		$query=$this->db->update( 'user', $data );
+        $querydeletelogins=$this->db->query("DELETE FROM `userlogin` WHERE `user`='$id'");
+        $querydeleteshops=$this->db->query("DELETE FROM `usershop` WHERE `user`='$id'");
+        foreach($shops AS $key=>$value)
+        {
+            $this->shop_model->createshopbyuser($value,$id);
+        }
+        foreach($logins AS $key=>$value)
+        {
+            $this->user_model->createloginuserbyuser($value,$id);
+        }
 //		if($query)
 //		{
 //			$this->saveuserlog($id,'User Details Edited');
@@ -200,9 +246,7 @@ class User_model extends CI_Model
      public function getuserdropdown()
 	{
 		$query=$this->db->query("SELECT * FROM `user`  ORDER BY `id` ASC")->result();
-		$return=array(
-		"" => ""
-		);
+		$return=array();
 		foreach($query as $row)
 		{
 			$return[$row->id]=$row->firstname." ".$row->lastname;

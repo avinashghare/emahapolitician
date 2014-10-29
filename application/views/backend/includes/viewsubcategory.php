@@ -1,7 +1,7 @@
 <div class=" row" style="padding:1% 0;">
 <!--
 	<div class="col-md-12">
-		<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary" href="<?php echo site_url('site/createcategory'); ?>"><i class="icon-plus"></i>Create </a></div>
+		<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary" href="<?php// echo site_url('site/createcategory'); ?>"><i class="icon-plus"></i>Create </a></div>
 	</div>
 -->
 </div>

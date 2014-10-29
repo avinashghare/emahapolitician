@@ -35,6 +35,8 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data['accesslevel']=$this->user_model->getaccesslevels();
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
+        $data['logins']=$this->user_model->getuserdropdown();
+        $data['shops']=$this->shop_model->getshopdropdown();
 		$data[ 'page' ] = 'createuser';
 		$data[ 'title' ] = 'Create User';
 		$this->load->view( 'template', $data );	
@@ -55,6 +57,8 @@ class Site extends CI_Controller
 		$this->form_validation->set_rules('area','Area','trim|');
 		$this->form_validation->set_rules('state','state','trim|');
 		$this->form_validation->set_rules('ip','ip','trim|');
+		$this->form_validation->set_rules('logins','logins','required');
+		$this->form_validation->set_rules('shops','shops','required');
 		$this->form_validation->set_rules('loyaltypoints','loyaltypoints','trim|');
 		$this->form_validation->set_rules('city','City','trim|');
 		$this->form_validation->set_rules('pincode','Pincode','trim|max_length[20]');
@@ -64,6 +68,8 @@ class Site extends CI_Controller
 			$data['alerterror'] = validation_errors();
 			$data[ 'status' ] =$this->user_model->getstatusdropdown();
 			$data['accesslevel']=$this->user_model->getaccesslevels();
+            $data['logins']=$this->user_model->getuserdropdown();
+            $data['shops']=$this->shop_model->getshopdropdown();
 			$data['page']='createuser';
 			$data['title']='Create New User';
 			$this->load->view('template',$data);
@@ -74,6 +80,8 @@ class Site extends CI_Controller
             $area=$this->input->post('area');
             $state=$this->input->post('state');
             $ip=$this->input->post('ip');
+            $shops=$this->input->post('shops');
+            $logins=$this->input->post('logins');
             $loyaltypoints=$this->input->post('loyaltypoints');
             $city=$this->input->post('city');
             $pincode=$this->input->post('pincode');
@@ -86,7 +94,7 @@ class Site extends CI_Controller
 			//$facebookuserid=$this->input->post('facebookuserid');
 			$firstname=$this->input->post('firstname');
 			$lastname=$this->input->post('lastname');
-			if($this->user_model->create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)==0)
+			if($this->user_model->create($firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode,$shops,$logins)==0)
 			$data['alerterror']="New user could not be created.";
 			else
 			$data['alertsuccess']="User created Successfully.";
@@ -133,7 +141,11 @@ class Site extends CI_Controller
 		$this->checkaccess($access);
 		$data[ 'status' ] =$this->user_model->getstatusdropdown();
 		$data['accesslevel']=$this->user_model->getaccesslevels();
+        $data['logins']=$this->user_model->getuserdropdown();
+        $data['shops']=$this->shop_model->getshopdropdown();
 		$data['before']=$this->user_model->beforeedit($this->input->get('id'));
+        $data['selectedlogins']=$this->user_model->getloginsbyuser($this->input->get('id'));
+        $data['selectedshops']=$this->shop_model->getshopsbyuser($this->input->get('id'));
 		$data['page']='edituser';
 		$data['page2']='block/userblock';
 		$data['title']='Edit User';
@@ -156,6 +168,8 @@ class Site extends CI_Controller
 		$this->form_validation->set_rules('area','Area','trim|');
 		$this->form_validation->set_rules('state','state','trim|');
 		$this->form_validation->set_rules('ip','ip','trim|');
+		$this->form_validation->set_rules('logins','logins','required');
+		$this->form_validation->set_rules('shops','shops','required');
 		$this->form_validation->set_rules('loyaltypoints','loyaltypoints','trim|');
 		$this->form_validation->set_rules('city','City','trim|');
 		$this->form_validation->set_rules('pincode','Pincode','trim|max_length[20]');
@@ -163,8 +177,12 @@ class Site extends CI_Controller
 		{
 			$data['alerterror'] = validation_errors();
 			$data[ 'status' ] =$this->user_model->getstatusdropdown();
-			$data['accesslevel']=$this->user_model->getaccesslevels();
-			$data['before']=$this->user_model->beforeedit($this->input->post('id'));
+            $data['accesslevel']=$this->user_model->getaccesslevels();
+            $data['logins']=$this->user_model->getuserdropdown();
+            $data['shops']=$this->shop_model->getshopdropdown();
+            $data['before']=$this->user_model->beforeedit($this->input->get('id'));
+            $data['selectedlogins']=$this->user_model->getloginsbyuser($this->input->get('id'));
+            $data['selectedshops']=$this->shop_model->getshopsbyuser($this->input->get('id'));
 			$data['page']='edituser';
 			$data['page2']='block/userblock';
 			$data['title']='Edit User';
@@ -177,6 +195,8 @@ class Site extends CI_Controller
             $area=$this->input->post('area');
             $state=$this->input->post('state');
             $ip=$this->input->post('ip');
+            $shops=$this->input->post('shops');
+            $logins=$this->input->post('logins');
             $loyaltypoints=$this->input->post('loyaltypoints');
             $city=$this->input->post('city');
             $pincode=$this->input->post('pincode');
@@ -190,7 +210,7 @@ class Site extends CI_Controller
 			$firstname=$this->input->post('firstname');
 			$lastname=$this->input->post('lastname');
 			
-			if($this->user_model->edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode)==0)
+			if($this->user_model->edit($id,$firstname,$lastname,$streetname,$area,$state,$ip,$loyaltypoints,$password,$accesslevel,$email,$contact,$status,$city,$pincode,$shops,$logins)==0)
 			$data['alerterror']="User Editing was unsuccesful";
 			else
 			$data['alertsuccess']="User edited Successfully.";
@@ -3511,6 +3531,7 @@ class Site extends CI_Controller
 	{
 		$access = array("1");
 		$this->checkaccess($access);
+        $data['codes']=$this->coupon_model->getcodesdropdown();
 		$data[ 'page' ] = 'createcoupon';
 		$data[ 'title' ] = 'Create coupon';
 		$this->load->view( 'template', $data );	
@@ -3520,21 +3541,24 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('codes','codes','required');
 		$this->form_validation->set_rules('rules','rules','trim|');
         
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
-		$data[ 'page' ] = 'createcoupon';
-		$data[ 'title' ] = 'Create coupon';
-		$this->load->view( 'template', $data );
+            $data['codes']=$this->coupon_model->getcodesdropdown();
+            $data[ 'page' ] = 'createcoupon';
+            $data[ 'title' ] = 'Create coupon';
+            $this->load->view( 'template', $data );
 		}
 		else
 		{
 			$name=$this->input->post('name');
 			$rules=$this->input->post('rules');
+			$codes=$this->input->post('codes');
 			
-			if($this->coupon_model->create($name,$rules)==0)
+			if($this->coupon_model->create($name,$rules,$codes)==0)
 			$data['alerterror']="New coupon could not be created.";
 			else
 			$data['alertsuccess']="coupon created Successfully.";
@@ -3551,6 +3575,8 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$data['before']=$this->coupon_model->beforeedit($this->input->get('id'));
+        $data['codes']=$this->coupon_model->getcodesdropdown();
+        $data['selectedcodes']=$this->coupon_model->getcodesbycoupon($this->input->get('id'));
 		$data['page']='editcoupon';
 		$data['title']='Edit coupon';
 		$this->load->view('template',$data);
@@ -3560,12 +3586,15 @@ class Site extends CI_Controller
 		$access = array("1");
 		$this->checkaccess($access);
 		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('codes','codes','required');
 		$this->form_validation->set_rules('rules','rules','trim|');
         
 		if($this->form_validation->run() == FALSE)	
 		{
 			$data['alerterror'] = validation_errors();
             $data['before']=$this->coupon_model->beforeedit($this->input->get('id'));
+            $data['codes']=$this->coupon_model->getcodesdropdown();
+            $data['selectedcodes']=$this->coupon_model->getcodesbycoupon($this->input->get('id'));
             $data['page']='editcoupon';
             $data['title']='Edit coupon';
             $this->load->view('template',$data);
@@ -3575,7 +3604,8 @@ class Site extends CI_Controller
 			$id=$this->input->get_post('id');
 			$name=$this->input->post('name');
 			$rules=$this->input->post('rules');
-			if($this->coupon_model->edit($id,$name,$rules)==0)
+			$codes=$this->input->post('codes');
+			if($this->coupon_model->edit($id,$name,$rules,$codes)==0)
 			$data['alerterror']="coupon Editing was unsuccesful";
 			else
 			$data['alertsuccess']="coupon edited Successfully.";
@@ -3596,6 +3626,145 @@ class Site extends CI_Controller
 		$data['alertsuccess']="coupon Deleted Successfully";
 		$data['page']='viewcoupon';
 		$data['title']='View coupon';
+		$this->load->view('template',$data);
+	}
+    
+    //vendor
+    
+    function viewvendor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['table']=$this->vendor_model->viewvendor();
+		$data['page']='viewvendor';
+		$data['title']='View vendor';
+		$this->load->view('template',$data);
+	} 
+     public function createvendor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+        $data['shop']=$this->shop_model->getshopdropdown();
+		$data[ 'page' ] = 'createvendor';
+		$data[ 'title' ] = 'Create Vendor';
+		$this->load->view( 'template', $data );	
+	}
+    function createvendorsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('shop','shop','trim|required');
+		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
+		$this->form_validation->set_rules('contact','contact','required');
+		$this->form_validation->set_rules('vat','vat','required');
+		$this->form_validation->set_rules('tin','tin','required');
+		$this->form_validation->set_rules('address','address','required');
+		$this->form_validation->set_rules('details','details','required');
+		$this->form_validation->set_rules('pan','pan','required');
+		$this->form_validation->set_rules('taxamount','taxamount','required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+            $data['shop']=$this->shop_model->getshopdropdown();
+            $data[ 'page' ] = 'createvendor';
+            $data[ 'title' ] = 'Create vendor';
+            $this->load->view( 'template', $data );
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$shop=$this->input->post('shop');
+			$email=$this->input->post('email');
+			$contact=$this->input->post('contact');
+			$vat=$this->input->post('vat');
+			$tin=$this->input->post('tin');
+			$address=$this->input->post('address');
+			$details=$this->input->post('details');
+			$pan=$this->input->post('pan');
+			$taxamount=$this->input->post('taxamount');
+			
+			if($this->vendor_model->create($name,$shop,$email,$contact,$vat,$tin,$address,$details,$pan,$taxamount)==0)
+			$data['alerterror']="New vendor could not be created.";
+			else
+			$data['alertsuccess']="vendor created Successfully.";
+			
+			$data['table']=$this->vendor_model->viewvendor();
+			$data['redirect']="site/viewvendor";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+		}
+	}
+    
+     function editvendor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->vendor_model->beforeedit($this->input->get('id'));
+        $data['shop']=$this->shop_model->getshopdropdown();
+		$data['page']='editvendor';
+		$data['title']='Edit vendor';
+		$this->load->view('template',$data);
+	}
+	function editvendorsubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		$this->form_validation->set_rules('shop','shop','trim|required');
+		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
+		$this->form_validation->set_rules('contact','contact','required');
+		$this->form_validation->set_rules('vat','vat','required');
+		$this->form_validation->set_rules('tin','tin','required');
+		$this->form_validation->set_rules('address','address','required');
+		$this->form_validation->set_rules('details','details','required');
+		$this->form_validation->set_rules('pan','pan','required');
+		$this->form_validation->set_rules('taxamount','taxamount','required');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+            $data['before']=$this->vendor_model->beforeedit($this->input->get('id'));
+            $data['shop']=$this->shop_model->getshopdropdown();
+            $data['page']='editvendor';
+            $data['title']='Edit vendor';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->get_post('id');
+			$name=$this->input->post('name');
+			$shop=$this->input->post('shop');
+			$email=$this->input->post('email');
+			$contact=$this->input->post('contact');
+			$vat=$this->input->post('vat');
+			$tin=$this->input->post('tin');
+			$address=$this->input->post('address');
+			$details=$this->input->post('details');
+			$pan=$this->input->post('pan');
+			$taxamount=$this->input->post('taxamount');
+			if($this->vendor_model->edit($id,$name,$shop,$email,$contact,$vat,$tin,$address,$details,$pan,$taxamount)==0)
+			$data['alerterror']="Vendor Editing was unsuccesful";
+			else
+			$data['alertsuccess']="Vendor edited Successfully.";
+			
+			$data['redirect']="site/viewvendor";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
+	function deletevendor()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->vendor_model->deletevendor($this->input->get('id'));
+		$data['table']=$this->vendor_model->viewvendor();
+		$data['alertsuccess']="vendor Deleted Successfully";
+		$data['page']='viewvendor';
+		$data['title']='View vendor';
 		$this->load->view('template',$data);
 	}
     

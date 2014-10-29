@@ -1,6 +1,6 @@
 	    <section class="panel">
 		    <header class="panel-heading">
-				 City Details
+				 Shop Navigation Details
 			</header>
 			<?php// print_r($before);?>
 			<div class="panel-body">
